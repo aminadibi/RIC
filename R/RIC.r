@@ -79,6 +79,8 @@ ric_parametric<-function(p_x=NA,mu_x,mu_b,sd_x,sd_b,rho,type)
 #' @param reg_object: a glm regression object (results of model fitting)
 #' @param pred_data: data for G-computation. It must have a marker column named x and a treatment column named tx. Note that if there is variable follow-up time they should all be set to a unique value (e.g., one unit of time) in the prediction dataset to estimate rate
 #' @return RIC estimates
+#' @examples
+#'
 #' @export
 ric_regression<-function(reg_object,pred_data)
 {
@@ -127,8 +129,53 @@ auci_mfc<-function(xb_data)
 
 
 
+#' calculate RIC metrics using different methods
+#' @return RIC metrics
+#' @param data: dataset
+#' @param marker_formula: formula for the marker
+#' @param q_formula: q_formula
+#' @param sample_size: sample size
+#' @examples
+#' ric(reg_data, marker_formula=events~tx+c1+c2+c3+offset(ln_time))
+#' ric(reg_data, marker_formula=events~tx+c1+c3+offset(ln_time))
+#' ric(reg_data, marker_formula=events~tx+c1+offset(ln_time))
+#' @export
+ric=function(data, marker_formula=events~tx+c1+c2+c3+offset(ln_time),q_formula=events~tx+c1+c2+c3+offset(ln_time),sample_size=1000)
+{
+  message("lenegd:\n dark line: empirical RIC\n grey line: parameteric approximation of RIC\n emp: empirical \n mfc: method of forced choice: simulating pairs of subjects and a=giving treatment to the one with higher marker value, b=giving both treatment, c) calculating the average benefit of a over b.\n parm: parametric approximation)")
+  pred_data<-data
+  pred_data[,'ln_time']<-0
+  #G-computation
+  reg_object<-MASS::glm.nb(data=reg_data,formula=q_formula,link=log)
+  res<-ric_regression(reg_object,pred_data)
+  plot(res$pq[,1],res$pq[,2],type='l',xlab="Proportion treated",ylab="Relative benefit",xlim=c(0,1),ylim=c(0,1))
+  text(0.7,0.3,paste("AUCi (emp):",round(res$auci,3)))
+  #Parametric RIC (Appendix II) based on estimated mean and covariance matrix of (x,b).
+  xb_data<-res$xb_data
+  xb_data[,2]<-log(xb_data[,2])
+  temp<-ric_parametric(p_x=(0:100)/100,mu_x =mean(xb_data[,1]),sd_x = sd(xb_data[,1]), mu_b = mean(xb_data[,2]), sd_b = sd(xb_data[,2]),rho = cor(xb_data)[1,2],type = "lognormal")
+  lines(temp$p_x,temp$q_x,lty=6,col='grey')
+  text(0.7,0.2,paste("AUCi (parm):",round(temp$auci,3)))
+  #Simulating the method of forced choice: creating pairs of subjects and a=giving treatment to the one with higher marker value, b=giving both treatment, c) calculating the average benefit of a over b
+  #see auci_mfc() for details
+  text(0.7,0.1,paste("AUCi (mfc):",round(auci_mfc(res$xb),3)))
+}
 
 
 
+ric_parametric_Validate<-function(mu_x = 0,mu_b = 1,sd_x = 1,sd_b = 1,rho = 0.5)
+{
+  xb_data<-MASS::mvrnorm(n=1000, mu=c(mu_x,mu_b), Sigma=rbind(c(sd_x^2,rho*sd_x*sd_b),c(rho*sd_x*sd_b,sd_b^2)))
+  o1<-ric_empirical(xb_data)
+  plot(o1$pq_data)
+  o2<-ric_parametric(p_x=(0:1000)/1000,mu_x,mu_b,sd_x,sd_b,rho,type = "normal")
+  lines(o2$p_x,o2$q_x,type="l",col="red")
 
+  x<-o2$local_slope
+  y<-(o2$q_x[-1]-o2$q_x[-length(o2$q_x)])/(o2$p_x[-1]-o2$p_x[-length(o2$p_x)])
+  x<-x[-which(abs(x)==Inf)]
+  y<-y[1:length(x)]
+  plot(x,y)
+  lines(c(-1000,1000),c(-1000,1000),col="red",type="l")
+}
 

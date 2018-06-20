@@ -17,3 +17,6 @@ RIC estimates
 \description{
 GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation. See the ric.sample file for examples.
 }
+\examples{
+
+}
