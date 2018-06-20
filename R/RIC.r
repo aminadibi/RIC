@@ -2,7 +2,7 @@
 
 
 #' Calculates the relevant statistics (p(x), q(x), and AUCi) given a random sample of marker and corresponding treatment benefit.
-#' @param xb_data: nX2 matrix with first oclumncolumn being the random draws from marker values and the second being an unbiased estimate of treatment benefit at that marker value
+#' @param xb_data: nX2 matrix with first column being the random draws from marker values and the second being an unbiased estimate of treatment benefit at that marker value
 #' @param b_bar: expected benefit of treating all v. treating no one. Should be populated with expected benefit of treatment without testing ONLY when the outcome is a policy-relevant metric that includes consequence of testing, otherwise the sample mean of benefits will be used;
 #' @return p(x), q(x), and AUCi
 #' @export
@@ -31,10 +31,6 @@ ric_empirical<-function(xb_data,b_bar=NULL)
 
 
 
-
-
-
-
 #' Returns p(x) and q(x) desired points and AUCi, and local slope when parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed. Note that this function does not need any data. Equations are provided in Appendix II of the paper.
 #' @param p_x: points on the x-axis of ric (p(x)): can be scalar or vector
 #' @param mu_x: mean of  marker value
@@ -43,6 +39,22 @@ ric_empirical<-function(xb_data,b_bar=NULL)
 #' @param sd_b: SD of  expected treatment benefit
 #' @param rho: correlation coefficient between marker and benefit. Note: do not use negative value as the underlying assumption (without loss of generality) is that higher marker value is associated with higher treatment benefit;
 #' @param type: normal or lognormal
+#' @examples
+#' q_formula = events~tx+c1+c2+c3+offset(ln_time)
+#' sample_size=1000
+#' data <- reg_data
+#' marker_formula = events~tx+c1+c2+c3+offset(ln_time)
+#' pred_data<-data
+#' pred_data[,'ln_time']<-0
+#' reg_object<-MASS::glm.nb(data=reg_data,formula=q_formula,link=log)
+#' res<-ric_regression(reg_object,pred_data)
+#' plot(res$pq[,1],res$pq[,2],type='l',xlab="Proportion treated",ylab="Relative benefit",xlim=c(0,1),ylim=c(0,1))
+#' text(0.7,0.3,paste("AUCi (emp):",round(res$auci,3)))
+#' xb_data<-res$xb_data
+#' xb_data[,2]<-log(xb_data[,2])
+#' temp<-ric_parametric(p_x=(0:100)/100,mu_x =mean(xb_data[,1]),sd_x = sd(xb_data[,1]), mu_b = mean(xb_data[,2]), sd_b = sd(xb_data[,2]),rho = cor(xb_data)[1,2],type = "lognormal")
+#' text(0.7,0.2,paste("AUCi (parm):",round(temp$auci,3)))
+#' text(0.7,0.1,paste("AUCi (mfc):",round(auci_mfc(res$xb),3)))
 #' @return p(x), q(x), and AUCi
 #' @export
 ric_parametric<-function(p_x=NA,mu_x,mu_b,sd_x,sd_b,rho,type)
@@ -67,12 +79,6 @@ ric_parametric<-function(p_x=NA,mu_x,mu_b,sd_x,sd_b,rho,type)
 
   return(list(x=x,p_x=p_x,q_x=q_x,auci=auci,local_slope=l_x))
 }
-
-
-
-
-
-
 
 
 #' GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation. See the ric.sample file for examples.
@@ -126,9 +132,6 @@ auci_mfc<-function(xb_data)
   return(b/count/mean(xb_data[,2]))
 }
 
-
-
-
 #' calculate RIC metrics using different methods
 #' @return RIC metrics
 #' @param data: dataset
@@ -162,20 +165,4 @@ ric=function(data, marker_formula=events~tx+c1+c2+c3+offset(ln_time),q_formula=e
 }
 
 
-
-ric_parametric_Validate<-function(mu_x = 0,mu_b = 1,sd_x = 1,sd_b = 1,rho = 0.5)
-{
-  xb_data<-MASS::mvrnorm(n=1000, mu=c(mu_x,mu_b), Sigma=rbind(c(sd_x^2,rho*sd_x*sd_b),c(rho*sd_x*sd_b,sd_b^2)))
-  o1<-ric_empirical(xb_data)
-  plot(o1$pq_data)
-  o2<-ric_parametric(p_x=(0:1000)/1000,mu_x,mu_b,sd_x,sd_b,rho,type = "normal")
-  lines(o2$p_x,o2$q_x,type="l",col="red")
-
-  x<-o2$local_slope
-  y<-(o2$q_x[-1]-o2$q_x[-length(o2$q_x)])/(o2$p_x[-1]-o2$p_x[-length(o2$p_x)])
-  x<-x[-which(abs(x)==Inf)]
-  y<-y[1:length(x)]
-  plot(x,y)
-  lines(c(-1000,1000),c(-1000,1000),col="red",type="l")
-}
 
