@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/aminadibi/RIC.svg?branch=master)](https://travis-ci.org/aminadibi/RIC)
+
 # RIC
 R Package for Relative Impact Characteristic (RIC) Curve
 
