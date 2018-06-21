@@ -7,16 +7,13 @@
 ric_regression(reg_object, pred_data)
 }
 \arguments{
-\item{reg_object:}{a glm regression object (results of model fitting)}
+\item{reg_object}{a glm regression object (results of model fitting)}
 
-\item{pred_data:}{data for G-computation. It must have a marker column named x and a treatment column named tx. Note that if there is variable follow-up time they should all be set to a unique value (e.g., one unit of time) in the prediction dataset to estimate rate}
+\item{pred_data}{data for G-computation. It must have a marker column named x and a treatment column named tx. Note that if there is variable follow-up time they should all be set to a unique value (e.g., one unit of time) in the prediction dataset to estimate rate}
 }
 \value{
 RIC estimates
 }
 \description{
 GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation. See the ric.sample file for examples.
-}
-\examples{
-
 }

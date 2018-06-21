@@ -6,6 +6,9 @@
 \usage{
 auci_mfc(xb_data)
 }
+\arguments{
+\item{xb_data}{xb_data. Please refer to the paper}
+}
 \value{
 the expected benefit of treating with higher biomarker value
 }

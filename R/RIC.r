@@ -2,8 +2,8 @@
 
 
 #' Calculates the relevant statistics (p(x), q(x), and AUCi) given a random sample of marker and corresponding treatment benefit.
-#' @param xb_data: nX2 matrix with first column being the random draws from marker values and the second being an unbiased estimate of treatment benefit at that marker value
-#' @param b_bar: expected benefit of treating all v. treating no one. Should be populated with expected benefit of treatment without testing ONLY when the outcome is a policy-relevant metric that includes consequence of testing, otherwise the sample mean of benefits will be used;
+#' @param xb_data nX2 matrix with first column being the random draws from marker values and the second being an unbiased estimate of treatment benefit at that marker value
+#' @param b_bar expected benefit of treating all v. treating no one. Should be populated with expected benefit of treatment without testing ONLY when the outcome is a policy-relevant metric that includes consequence of testing, otherwise the sample mean of benefits will be used;
 #' @return p(x), q(x), and AUCi
 #' @export
 ric_empirical<-function(xb_data,b_bar=NULL)
@@ -32,29 +32,13 @@ ric_empirical<-function(xb_data,b_bar=NULL)
 
 
 #' Returns p(x) and q(x) desired points and AUCi, and local slope when parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed. Note that this function does not need any data. Equations are provided in Appendix II of the paper.
-#' @param p_x: points on the x-axis of ric (p(x)): can be scalar or vector
-#' @param mu_x: mean of  marker value
-#' @param mu_b: mean of  expected treatment benefit
-#' @param sd_x: SD of marker value
-#' @param sd_b: SD of  expected treatment benefit
-#' @param rho: correlation coefficient between marker and benefit. Note: do not use negative value as the underlying assumption (without loss of generality) is that higher marker value is associated with higher treatment benefit;
-#' @param type: normal or lognormal
-#' @examples
-#' q_formula = events~tx+c1+c2+c3+offset(ln_time)
-#' sample_size=1000
-#' data <- reg_data
-#' marker_formula = events~tx+c1+c2+c3+offset(ln_time)
-#' pred_data<-data
-#' pred_data[,'ln_time']<-0
-#' reg_object<-MASS::glm.nb(data=reg_data,formula=q_formula,link=log)
-#' res<-ric_regression(reg_object,pred_data)
-#' plot(res$pq[,1],res$pq[,2],type='l',xlab="Proportion treated",ylab="Relative benefit",xlim=c(0,1),ylim=c(0,1))
-#' text(0.7,0.3,paste("AUCi (emp):",round(res$auci,3)))
-#' xb_data<-res$xb_data
-#' xb_data[,2]<-log(xb_data[,2])
-#' temp<-ric_parametric(p_x=(0:100)/100,mu_x =mean(xb_data[,1]),sd_x = sd(xb_data[,1]), mu_b = mean(xb_data[,2]), sd_b = sd(xb_data[,2]),rho = cor(xb_data)[1,2],type = "lognormal")
-#' text(0.7,0.2,paste("AUCi (parm):",round(temp$auci,3)))
-#' text(0.7,0.1,paste("AUCi (mfc):",round(auci_mfc(res$xb),3)))
+#' @param p_x points on the x-axis of ric (p(x)): can be scalar or vector
+#' @param mu_x mean of  marker value
+#' @param mu_b mean of  expected treatment benefit
+#' @param sd_x SD of marker value
+#' @param sd_b SD of  expected treatment benefit
+#' @param rho correlation coefficient between marker and benefit. Note: do not use negative value as the underlying assumption (without loss of generality) is that higher marker value is associated with higher treatment benefit;
+#' @param type normal or lognormal
 #' @return p(x), q(x), and AUCi
 #' @export
 ric_parametric<-function(p_x=NA,mu_x,mu_b,sd_x,sd_b,rho,type)
@@ -82,11 +66,9 @@ ric_parametric<-function(p_x=NA,mu_x,mu_b,sd_x,sd_b,rho,type)
 
 
 #' GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation. See the ric.sample file for examples.
-#' @param reg_object: a glm regression object (results of model fitting)
-#' @param pred_data: data for G-computation. It must have a marker column named x and a treatment column named tx. Note that if there is variable follow-up time they should all be set to a unique value (e.g., one unit of time) in the prediction dataset to estimate rate
+#' @param reg_object a glm regression object (results of model fitting)
+#' @param pred_data data for G-computation. It must have a marker column named x and a treatment column named tx. Note that if there is variable follow-up time they should all be set to a unique value (e.g., one unit of time) in the prediction dataset to estimate rate
 #' @return RIC estimates
-#' @examples
-#'
 #' @export
 ric_regression<-function(reg_object,pred_data)
 {
@@ -112,6 +94,7 @@ ric_regression<-function(reg_object,pred_data)
 
 
 #' Calculating AUCi using the method of forced choice as explained in the text (Appendix I); loops over all possible pairs and estimates the expected benefit of treating only the one with higher biomarker value
+#' @param xb_data xb_data. Please refer to the paper
 #' @return the expected benefit of treating with higher biomarker value
 #' @export
 auci_mfc<-function(xb_data)
@@ -134,10 +117,10 @@ auci_mfc<-function(xb_data)
 
 #' calculate RIC metrics using different methods
 #' @return RIC metrics
-#' @param data: dataset
-#' @param marker_formula: formula for the marker
-#' @param q_formula: q_formula
-#' @param sample_size: sample size
+#' @param data dataset
+#' @param marker_formula formula for the marker
+#' @param q_formula q_formula
+#' @param sample_size sample size
 #' @examples
 #' ric(reg_data, marker_formula=events~tx+c1+c2+c3+offset(ln_time))
 #' ric(reg_data, marker_formula=events~tx+c1+c3+offset(ln_time))

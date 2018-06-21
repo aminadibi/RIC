@@ -9,13 +9,13 @@ ric(data, marker_formula = events ~ tx + c1 + c2 + c3 + offset(ln_time),
   sample_size = 1000)
 }
 \arguments{
-\item{data:}{dataset}
+\item{data}{dataset}
 
-\item{marker_formula:}{formula for the marker}
+\item{marker_formula}{formula for the marker}
 
-\item{q_formula:}{q_formula}
+\item{q_formula}{q_formula}
 
-\item{sample_size:}{sample size}
+\item{sample_size}{sample size}
 }
 \value{
 RIC metrics

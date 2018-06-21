@@ -7,40 +7,23 @@
 ric_parametric(p_x = NA, mu_x, mu_b, sd_x, sd_b, rho, type)
 }
 \arguments{
-\item{p_x:}{points on the x-axis of ric (p(x)): can be scalar or vector}
+\item{p_x}{points on the x-axis of ric (p(x)): can be scalar or vector}
 
-\item{mu_x:}{mean of  marker value}
+\item{mu_x}{mean of  marker value}
 
-\item{mu_b:}{mean of  expected treatment benefit}
+\item{mu_b}{mean of  expected treatment benefit}
 
-\item{sd_x:}{SD of marker value}
+\item{sd_x}{SD of marker value}
 
-\item{sd_b:}{SD of  expected treatment benefit}
+\item{sd_b}{SD of  expected treatment benefit}
 
-\item{rho:}{correlation coefficient between marker and benefit. Note: do not use negative value as the underlying assumption (without loss of generality) is that higher marker value is associated with higher treatment benefit;}
+\item{rho}{correlation coefficient between marker and benefit. Note: do not use negative value as the underlying assumption (without loss of generality) is that higher marker value is associated with higher treatment benefit;}
 
-\item{type:}{normal or lognormal}
+\item{type}{normal or lognormal}
 }
 \value{
 p(x), q(x), and AUCi
 }
 \description{
 Returns p(x) and q(x) desired points and AUCi, and local slope when parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed. Note that this function does not need any data. Equations are provided in Appendix II of the paper.
-}
-\examples{
-q_formula = events~tx+c1+c2+c3+offset(ln_time)
-sample_size=1000
-data <- reg_data
-marker_formula = events~tx+c1+c2+c3+offset(ln_time)
-pred_data<-data
-pred_data[,'ln_time']<-0
-reg_object<-MASS::glm.nb(data=reg_data,formula=q_formula,link=log)
-res<-ric_regression(reg_object,pred_data)
-plot(res$pq[,1],res$pq[,2],type='l',xlab="Proportion treated",ylab="Relative benefit",xlim=c(0,1),ylim=c(0,1))
-text(0.7,0.3,paste("AUCi (emp):",round(res$auci,3)))
-xb_data<-res$xb_data
-xb_data[,2]<-log(xb_data[,2])
-temp<-ric_parametric(p_x=(0:100)/100,mu_x =mean(xb_data[,1]),sd_x = sd(xb_data[,1]), mu_b = mean(xb_data[,2]), sd_b = sd(xb_data[,2]),rho = cor(xb_data)[1,2],type = "lognormal")
-text(0.7,0.2,paste("AUCi (parm):",round(temp$auci,3)))
-text(0.7,0.1,paste("AUCi (mfc):",round(auci_mfc(res$xb),3)))
 }
