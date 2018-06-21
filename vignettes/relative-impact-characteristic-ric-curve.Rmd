@@ -1,13 +1,13 @@
 ---
-title: "Vignette Title"
+title: "Relative Impact Characteristic (RIC) Curve"
 author: "Amin Adibi, Mohsen Sadatsafavi"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Relative Impact Characteristic (RIC) Curve}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
+---s
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
