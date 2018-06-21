@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Relative Impact Characteristic (RIC) Curve}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----s
+---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
