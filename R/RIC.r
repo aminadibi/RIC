@@ -97,7 +97,7 @@ ric_regression<-function(reg_object,pred_data)
 #' @param xb_data xb_data. Please refer to the paper
 #' @return the expected benefit of treating with higher biomarker value
 #' @export
-auci_mfc < -function(xb_data)
+auci_mfc <- function(xb_data)
 {
   n<-dim(xb_data)[1]
 
