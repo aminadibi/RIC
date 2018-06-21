@@ -97,7 +97,7 @@ ric_regression<-function(reg_object,pred_data)
 #' @param xb_data xb_data. Please refer to the paper
 #' @return the expected benefit of treating with higher biomarker value
 #' @export
-auci_mfc<-function(xb_data)
+auci_mfc < -function(xb_data)
 {
   n<-dim(xb_data)[1]
 
@@ -126,9 +126,9 @@ auci_mfc<-function(xb_data)
 #' ric(reg_data, marker_formula=events~tx+c1+c3+offset(ln_time))
 #' ric(reg_data, marker_formula=events~tx+c1+offset(ln_time))
 #' @export
-ric=function(data, marker_formula=events~tx+c1+c2+c3+offset(ln_time),q_formula=events~tx+c1+c2+c3+offset(ln_time),sample_size=1000)
+ric <- function(data, marker_formula=events~tx+c1+c2+c3+offset(ln_time),q_formula=events~tx+c1+c2+c3+offset(ln_time),sample_size=1000)
 {
-  message("lenegd:\n dark line: empirical RIC\n grey line: parameteric approximation of RIC\n emp: empirical \n mfc: method of forced choice: simulating pairs of subjects and a=giving treatment to the one with higher marker value, b=giving both treatment, c) calculating the average benefit of a over b.\n parm: parametric approximation)")
+  #message("lenegd:\n dark line: empirical RIC\n grey line: parameteric approximation of RIC\n emp: empirical \n mfc: method of forced choice: simulating pairs of subjects and a=giving treatment to the one with higher marker value, b=giving both treatment, c) calculating the average benefit of a over b.\n parm: parametric approximation)")
   pred_data<-data
   pred_data[,'ln_time']<-0
   #G-computation
