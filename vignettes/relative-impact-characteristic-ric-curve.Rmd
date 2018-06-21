@@ -1,6 +1,6 @@
 ---
 title: "Relative Impact Characteristic (RIC) Curve"
-author: "Amin Adibi, Mohsen Sadatsafavi"
+author: "Mohsen Sadatsafavi, Amin Adibi"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -18,12 +18,7 @@ knitr::opts_chunk$set(
 Relative Impact Characteristic (RIC) curve is a novel graphical tool that visualizes 
 the trade-off between the population-level impact of a treatment as a function of the size of the treated population for a given marker threshold. While the Receiver Operating Characteristic (ROC) curve and its associated metrics quanitfy the diagnostic performance of a biomarker at the patient-level, RIC curve provides insights into a marker's ability towards concentrating treatment benefit at the population level.
 
-
-Interpretations of shape, area under curve and slope in RIC curve are analogous to the widely used ROC curve, making it easier to use by the research community.  
-
-## Vignette Info
-
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+Interpretations of shape, area under curve and slope in RIC curve are analogous to the widely used ROC curve, making it easier to use by the research community. The following sections outline basic characteristics of the RIC curve and provide an example that illustrates its use. For a more comphrenesive discussion and a case study, please refer to the original research paper entitled *Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers* ^[Mohsen Sadatsafavi, Paul Gustafson, Zafar Zafari, and Don D. Sin, **Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers**, *Annals of Epidemiology*]  
 
 ## Shape of the RIC curve
 
@@ -32,24 +27,15 @@ Note the various macros within the `vignette` section of the metadata block abov
 
 ## Slopes of the RIC curve
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
 
 ## Example with Simulated Data
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, and tables, e.g. using 
+```{r, echo=FALSE}
+library(RIC)
+tab <- head(reg_data)
+knitr::kable(tab)
+```
 
 ```{r, echo=TRUE, results='asis'}
 #knitr::kable(head(mtcars, 10))
@@ -76,26 +62,18 @@ ric=function(marker_formula=events~tx+c1+c2+c3+offset(ln_time),q_formula=events~
   text(0.7,0.1,paste("AUCi (mfc):",round(auci_mfc(res$xb),3)))
 }
 
-
-
-
 #Main code
 
-
-
 #Complete score (includes all covariates)
-#x11()
 ric(marker_formula=events~tx+c1+c2+c3+offset(ln_time))
 title("Figure 1")
 
 #Partial score with C2 removed - note that RIC becomes jagged
-#x11()
 ric(marker_formula=events~tx+c1+c3+offset(ln_time))
 title("Figure 2")
 
 
 #Non-informative marker (c1 is not associated with the outcome) - note that RIC becomes jagged
-#x11()
 ric(marker_formula=events~tx+c1+offset(ln_time))
 title("Figure 3")
 
