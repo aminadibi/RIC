@@ -20,7 +20,7 @@ the trade-off between the population-level impact of a treatment as a function o
 
 Interpretations of shape, area under curve and slope in RIC curve are analogous to the widely used ROC curve, making it easier to use by the research community. The following sections outline basic characteristics of the RIC curve and provide an example that illustrates its use. For a more comphrenesive discussion and a case study, please refer to the original research paper entitled *Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers* ^[Mohsen Sadatsafavi, Paul Gustafson, Zafar Zafari, and Don D. Sin, **Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers**, *Annals of Epidemiology*]  
 
-## Defintion of the RIC Curve
+## Definition of the RIC Curve
 
 In its most basic use case, the RIC curve can be drawn for a single disease biomarker or a risk prediction score. The marker is assumed to have a continuous value, and to be used for a binary treatment decision. We assume that patients with marker values higher than a threshold value $x$ are to recieve the treatment.  
 
@@ -30,20 +30,37 @@ $p(x) = \int_x^{+\infty} f(y) dy$
 
 where $f$ is the probability distribution of the marker value in the population.
 
-$\bar{b} = \int _x ^{+\infty} b(y)f(y)dy$
+The vertical axis of the plot is "the relative impact" and is denoted by $q$. Relative impace is defined as the expected effect of treatment in individuals who receive the treatment divided by the expected effect in all patients. 
 
-$q(x) = \int _x ^{+\infty} b(y)f(y)dy/ \bar{b}$
+In mathematical terms,
 
-The RIC curve is a plot of $p(x)$ against $q(x)$ as $x$ varies. 
+$q(x) = \int _x ^{+\infty} b(y)f(y)dy/ \bar{b}$, 
+
+where $b(x)$ is the expected treatment effect and $\bar{q}$ is the average treatment effect when provided to all: 
+
+$\bar{b} = \int _x ^{+\infty} b(y)f(y)dy$.
+
+The RIC curve is the plot of $p(x)$ against $q(x)$ as $x$ varies. 
 
 
-## Shape of the RIC curve
+## Similarities with the Receiver Operating Characteristic (ROC) Curve
+
+Similar to the widely used ROC curve, RIC has interpretable shape, area under the curve, and slope. .
+
+### Shape of the RIC curve
 
 
-## Area Under the Curve
+### Area Under the Curve
 
-## Slopes of the RIC curve
+The area under the RIC curve $(AUC_I)$ can be used to compare, independently of any threshold, different combination of tests to inform a treatment decision. If two individuals are selected at random, the $(AUC_I)$ is the relative impact of the decision to provide the treatment only to the individual with a higher marker value, compared with providing the treatment to both.
 
+
+### Slopes of the RIC curve
+
+![RIC_Slope](./slope.png)
+
+
+If the treatment effect is characterized as the change in the risk or rate of an event, the slopes on the RIC curve can be used to find thresholds based on minimal acceptable risk reduction provided by treatment, or the corresponding maximal acceptable number-needed-to-treat, as will be explained in the case study.
 
 ## Example with Simulated Data
 
