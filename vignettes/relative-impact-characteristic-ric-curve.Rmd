@@ -20,6 +20,23 @@ the trade-off between the population-level impact of a treatment as a function o
 
 Interpretations of shape, area under curve and slope in RIC curve are analogous to the widely used ROC curve, making it easier to use by the research community. The following sections outline basic characteristics of the RIC curve and provide an example that illustrates its use. For a more comphrenesive discussion and a case study, please refer to the original research paper entitled *Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers* ^[Mohsen Sadatsafavi, Paul Gustafson, Zafar Zafari, and Don D. Sin, **Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers**, *Annals of Epidemiology*]  
 
+## Defintion of the RIC Curve
+
+In its most basic use case, the RIC curve can be drawn for a single disease biomarker or a risk prediction score. The marker is assumed to have a continuous value, and to be used for a binary treatment decision. We assume that patients with marker values higher than a threshold value $x$ are to recieve the treatment.  
+
+The horizontal axis of the plot, $p$, is defined as the proportion of the population that receives the treatment. Note that $p$ is a function of the marker threshold value $x$:  
+
+$p(x) = \int_x^{+\infty} f(y) dy$
+
+where $f$ is the probability distribution of the marker value in the population.
+
+$\bar{b} = \int _x ^{+\infty} b(y)f(y)dy$
+
+$q(x) = \int _x ^{+\infty} b(y)f(y)dy/ \bar{b}$
+
+The RIC curve is a plot of $p(x)$ against $q(x)$ as $x$ varies. 
+
+
 ## Shape of the RIC curve
 
 
