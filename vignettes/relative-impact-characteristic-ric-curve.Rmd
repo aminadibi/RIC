@@ -12,7 +12,8 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width=6, fig.height=4
 )
 ```
 Relative Impact Characteristic (RIC) curve is a novel graphical tool that visualizes 
@@ -48,6 +49,12 @@ The RIC curve is the plot of $p(x)$ against $q(x)$ as $x$ varies.
 Similar to the widely used ROC curve, RIC has interpretable shape, area under the curve, and slope. .
 
 ### Shape of the RIC curve
+
+Similar to the ROC curve, the non-informative marker on the RIC curve for a clinical
+outcome therefore corresponds to a line connecting points (0,0) and (1,1). If the relation
+between marker values and treatment benefit is monotonic, the curve can take certain shapes
+which are explained in figure below.
+
 
 
 ### Area Under the Curve
