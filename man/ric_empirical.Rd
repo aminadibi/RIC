@@ -7,9 +7,9 @@
 ric_empirical(xb_data, b_bar = NULL)
 }
 \arguments{
-\item{xb_data}{nX2 matrix with first column being the random draws from marker values and the second being an unbiased estimate of treatment benefit at that marker value}
+\item{xb_data}{nx2 matrix with first column being the random draws from marker values and the second being an unbiased estimate of treatment benefit at that marker value}
 
-\item{b_bar}{expected benefit of treating all v. treating no one. Should be populated with expected benefit of treatment without testing ONLY when the outcome is a policy-relevant metric that includes consequence of testing, otherwise the sample mean of benefits will be used;}
+\item{b_bar}{expected benefit of treating all eligible patients vs. treating no one. Should be populated with expected benefit of treatment without testing ONLY when the outcome is a policy-relevant metric that includes the consequence of testing, otherwise the sample mean of benefits will be used;}
 }
 \value{
 p(x), q(x), and AUCi

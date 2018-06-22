@@ -6,13 +6,13 @@
 \title{Sample dataset}
 \format{A data frame with columns:
 \describe{
- \item{ln_time}{A value between 1924 and 2015.}
- \item{events}{Maple products expressed as syrup, total in thousands of gallons.}
- \item{tx}{Gross value of maple products in thousands of Canadian dollars.}
- \item{c1}{c1}
- \item{c2}{c2}
- \item{c3}{c3}
- \item{x}{x}
+ \item{ln_time}{Log of follow-up}
+ \item{events}{Number of events}
+ \item{tx}{Binary varianble indicating treatment assignment.}
+ \item{c1}{First covariate. Binary variable.}
+ \item{c2}{Second covariate. Continuous variable. }
+ \item{c3}{Third covariate. Continuous variable.}
+ \item{x}{Risk score as an example of a marker}
 }}
 \source{
 Simulated
