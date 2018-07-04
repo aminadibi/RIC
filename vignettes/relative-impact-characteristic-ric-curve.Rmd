@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
   fig.width=6, fig.height=4
 )
 ```
-Relative Impact Characteristic (RIC) curve is a novel graphical tool that visualizes the power of a marker (e.g., a biomarker  or a risk prediction score) in terms of its capacity towards 'concentration of benefit' fro msubsequent therapies. 
+Relative Impact Characteristic (RIC) curve is a novel graphical tool that visualizes the power of a marker (e.g., a biomarker or a risk prediction score) in terms of its capacity towards 'concentration of benefit' from subsequent therapies. 
 
 RIC depicts the trade-off between the population-level impact of a treatment (Y-axis) as a function of the size of the treated population (X-axis) for a given marker threshold. 
 
@@ -75,7 +75,7 @@ If the treatment effect is characterized as the change in the risk or rate of an
 
 A simulated dataset called `reg_data` is included in the package. The dataset pertains to a simulated randomized clnical trial in which patients are randomized to either placebo or treatment and are followed for up to one year. The outcome of interest is the number of disease flair-ups (exacerbations) during follow up.
 
-For each individual, the dataset contains the marker value (x), three covariates (c1-c3), a tratment assignment indicator (tx), log of follow-up time (ln_time), and number of events (events). The first few data rows are provided below
+For each individual, the dataset contains the marker value (x), three covariates (c1-c3), a treatment assignment indicator (tx), log of follow-up time (ln_time), and number of events (events). The first few data rows are provided below
 
 #Amin please rearrange the columns and also add a patient id column (left most)
 
