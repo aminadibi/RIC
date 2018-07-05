@@ -1,2 +1,2 @@
-# RIC V1.0.0
+# RIC v0.1.0
 Release version
