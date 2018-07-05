@@ -26,6 +26,12 @@ The following sections outline basic characteristics of the RIC curve and provid
 
 ## Definition of the RIC Curve
 
+Imagine a clinical scenario in which a clinican has to decide whether to prescribe radiotherapy to prevent relapse in cancer patients who have been successfully treated and are currently cancer-free. If the patient is susceptible to relapse, radiotherapy might prevent that at the expense of the cost and potential side-effects. However, if the patient is not susceptible to relapse, radiotherapy not only is costly, but also could be harmful due to its side-effects. For these reasons, the goal is to limit radiotherapy to those patients who are *more likely* to benefit from it. 
+
+For certain diseases, there are biomarkers (i.e. a blood test) or risk scores (i.e. the Framingham Risk Score) that can estimate whether the patient is susceptible to a certain outcome or not. A threshold value of the markers can then be used to decide the course of action, in this case whether to provide the treatment or not. 
+
+In developing these markers, researchers often have many candidates to choose from. While the ROC curve compares the diagnostic ability of such markers, the RIC curve allows visual comparison of markers based on their abiltiy to concentrate the benefit. 
+
 In its most basic use case, the RIC curve can be drawn for a single disease marker or a risk prediction score. The marker is assumed to have a continuous value, and to be used for a binary treatment decision. We assume that patients with marker values higher than a threshold value $x$ are to recieve the treatment.  
 
 The horizontal axis of the plot, $p$, is defined as the proportion of the population that receives the treatment. Note that $p$ is a function of the marker threshold value $x$:  
@@ -51,15 +57,16 @@ The RIC curve is the plot of $p(x)$ against $q(x)$ as $x$ varies.
 
 ## Similarities with the Receiver Operating Characteristic (ROC) Curve
 
-Similar to the widely used ROC curve, RIC has interpretable shape, area under the curve, and slope. .
+Similar to the widely used ROC curve, RIC has interpretable shape, area under the curve, and slope.
 
 ### Shape of the RIC curve
 
 Similar to the ROC curve, the non-informative marker on the RIC curve for a clinical
-outcome therefore corresponds to a line connecting points (0,0) and (1,1). If the relation
-between marker values and treatment benefit is monotonic, the curve can take certain shapes
-which are explained in figure below.
+outcome corresponds to a line connecting points (0,0) and (1,1). The more concave the curve, the better the marker. 
 
+An illustrative example would make this more clear. Assume there are two candidate markers (green and red) that can be used to decide whether or not to provide the treatment. In the RIC plot below the marker that corresponds to the green line provides better concentration of benefits at any given level of $q$. For instance, if we choose threshold values that lead to half of patients receiving the treatment, the green marker will provide more benefit. 
+
+![RIC_shape](./RIC_shape.png)
 
 ### Area Under the Curve
 
@@ -74,7 +81,7 @@ If the treatment effect is characterized as the change in the risk or rate of an
 
 A simulated dataset called `reg_data` is included in the package. The dataset pertains to a simulated randomized clnical trial in which patients are randomized to either placebo or treatment and are followed for up to one year. The outcome of interest is the number of disease flair-ups (exacerbations) during follow up.
 
-For each individual, the dataset contains the marker value (x), three covariates (c1-c3), a treatment assignment indicator (tx), log of follow-up time (ln_time), and number of events (events). The first few data rows are provided below
+For each individual, the dataset contains the marker value (x), three covariates (c1-c3), a treatment assignment indicator (tx), log of follow-up time (ln_time), and number of events (events). The first few data rows are provided below:
 
 ```{r, echo=FALSE}
 library(RIC)
