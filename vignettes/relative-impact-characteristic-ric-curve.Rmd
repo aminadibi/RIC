@@ -46,6 +46,8 @@ $\bar{b} = \int _x ^{+\infty} b(y)f(y)dy$.
 
 The RIC curve is the plot of $p(x)$ against $q(x)$ as $x$ varies. 
 
+![RIC](./RIC.png)
+
 
 ## Similarities with the Receiver Operating Characteristic (ROC) Curve
 
@@ -66,9 +68,6 @@ The area under the RIC curve $(AUC_I)$ can be used to compare, independently of 
 
 ### Slopes of the RIC curve
 
-![RIC_Slope](./slope.png)
-
-
 If the treatment effect is characterized as the change in the risk or rate of an event, the slopes on the RIC curve can be used to find thresholds based on minimal acceptable risk reduction provided by treatment, or the corresponding maximal acceptable number-needed-to-treat, as will be explained in the case study.
 
 ## Example with Simulated Data
@@ -77,9 +76,7 @@ A simulated dataset called `reg_data` is included in the package. The dataset pe
 
 For each individual, the dataset contains the marker value (x), three covariates (c1-c3), a treatment assignment indicator (tx), log of follow-up time (ln_time), and number of events (events). The first few data rows are provided below
 
-#Amin please rearrange the columns and also add a patient id column (left most)
-
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 library(RIC)
 #summary(reg_data)
 tab <- head(reg_data)
