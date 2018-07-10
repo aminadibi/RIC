@@ -115,37 +115,4 @@ auci_mfc <- function(xb_data)
   return(b/count/mean(xb_data[,2]))
 }
 
-#' calculate RIC metrics using different methods
-#' @return RIC metrics
-#' @param data dataset
-#' @param marker_formula formula for the marker
-#' @param q_formula q_formula
-#' @param sample_size sample size
-#' @examples
-#' ric(reg_data, marker_formula=events~tx+c1+c2+c3+offset(ln_time))
-#' ric(reg_data, marker_formula=events~tx+c1+c3+offset(ln_time))
-#' ric(reg_data, marker_formula=events~tx+c1+offset(ln_time))
-#' @export
-ric <- function(data, marker_formula=events~tx+c1+c2+c3+offset(ln_time),q_formula=events~tx+c1+c2+c3+offset(ln_time),sample_size=1000)
-{
-  #message("lenegd:\n dark line: empirical RIC\n grey line: parameteric approximation of RIC\n emp: empirical \n mfc: method of forced choice: simulating pairs of subjects and a=giving treatment to the one with higher marker value, b=giving both treatment, c) calculating the average benefit of a over b.\n parm: parametric approximation)")
-  pred_data<-data
-  pred_data[,'ln_time']<-0
-  #G-computation
-  reg_object<-MASS::glm.nb(data=reg_data,formula=q_formula,link=log)
-  res<-ric_regression(reg_object,pred_data)
-  plot(res$pq[,1],res$pq[,2],type='l',xlab="Proportion treated",ylab="Relative benefit",xlim=c(0,1),ylim=c(0,1))
-  text(0.7,0.3,paste("AUCi (emp):",round(res$auci,3)))
-  #Parametric RIC (Appendix II) based on estimated mean and covariance matrix of (x,b).
-  xb_data<-res$xb_data
-  xb_data[,2]<-log(xb_data[,2])
-  temp<-ric_parametric(p_x=(0:100)/100,mu_x =mean(xb_data[,1]),sd_x = sd(xb_data[,1]), mu_b = mean(xb_data[,2]), sd_b = sd(xb_data[,2]),rho = cor(xb_data)[1,2],type = "lognormal")
-  lines(temp$p_x,temp$q_x,lty=6,col='grey')
-  text(0.7,0.2,paste("AUCi (parm):",round(temp$auci,3)))
-  #Simulating the method of forced choice: creating pairs of subjects and a=giving treatment to the one with higher marker value, b=giving both treatment, c) calculating the average benefit of a over b
-  #see auci_mfc() for details
-  text(0.7,0.1,paste("AUCi (mfc):",round(auci_mfc(res$xb),3)))
-}
-
-
 
