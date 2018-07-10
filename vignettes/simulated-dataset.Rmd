@@ -26,35 +26,42 @@ library(MASS)
 
 Next, we create a function called 'generate_date', which will create a sample dataset with follow-up time, number of events, treatment assignment, and three covariates. 
 ```{r, eval=FALSE}
-generate_data<-function(n_data=1000, 
-                        ln_rate_coeffs=c(intercept=-0.5,tx=log(1/3), c1=log(1), c2=log(2), c3=log(3)),
-                        rate_v=1, cov_mu=c(0,0,0), cov_sigma=rbind(c(1,0,0), c(0,1,0), c(0,0,1)))
+generate_data <- function(n_data = 1000, 
+                        ln_rate_coeffs = c(intercept=-0.5, tx=log(1/3), c1=log(1), c2=log(2), c3=log(3)),
+                        rate_v = 1, 
+                        cov_mu = c(0,0,0), 
+                        cov_sigma = rbind(c(1,0,0), c(0,1,0), c(0,0,1)))
 {
-  tx<-(runif(n_data)>0.5)*1
+  tx <- (runif(n_data) > 0.5) * 1
   
   #Covariates can be correlated see cov_sigma input parameter
-  temp<-mvrnorm(n=n_data, mu=cov_mu, Sigma=cov_sigma)
+  multivariateSample <- mvrnorm(n = n_data, mu = cov_mu, Sigma = cov_sigma)
   
-  temp[,1]<-(temp[,1]>0.5)*1  #changing the first covariate to binary
+  multivariateSample[,1] <- (multivariateSample[,1] > 0.5) * 1  #changing the first covariate to binary
     
   #Calculating the actual rate of event for each person
-  rate_mu<-exp(ln_rate_coeffs['intercept']
-            +ln_rate_coeffs['tx']*tx
-            +ln_rate_coeffs['c1']*temp[,1]
-            +ln_rate_coeffs['c2']*temp[,2]
-            +ln_rate_coeffs['c3']*temp[,3]
+  rate_mu <- exp(ln_rate_coeffs['intercept']
+            +ln_rate_coeffs['tx'] * tx
+            +ln_rate_coeffs['c1'] * multivariateSample[,1]
+            +ln_rate_coeffs['c2'] * multivariateSample[,2]
+            +ln_rate_coeffs['c3'] * multivariateSample[,3]
          )
   
   #Heterogeneity in rate is modelled with a gamma distribution, giving rise to negative binomial regression
-  rates<-rgamma(n_data, rate=rate_mu/rate_v, shape=rate_mu*rate_mu/rate_v)
+  rates <- rgamma(n_data, rate = rate_mu / rate_v, shape = rate_mu * rate_mu / rate_v)
   
   #Follow-up time is cut at one year
-  times<-exp(rnorm(n_data,log(1),0.1))
-  times[which(times>1)]<-1
+  times <- exp(rnorm(n_data, log(1), 0.1))
+  times[which(times>1)] <- 1
   
-  events<-rpois(n_data,rates*times)
+  events <- rpois(n_data,rates*times)
   
-  out_data<-as.data.frame(cbind(ln_time=log(times),events=events,tx=tx,c1=temp[,1],c2=temp[,2],c3=temp[,3]))
+  out_data <- as.data.frame(cbind(ln_time = log(times),
+                                  events = events,
+                                  tx = tx,
+                                  c1 = multivariateSample[,1],
+                                  c2 = multivariateSample[,2],
+                                  c3 = multivariateSample[,3]))
   
   return(out_data)
 }
@@ -64,31 +71,29 @@ Next, we create a second function by the name of 'generate_marker', which genera
 
 
 ```{r, eval=FALSE}
-generate_marker<-function(formula=events~tx+c1+c2+c3+offset(ln_time),reg_data)
+generate_marker <- function(formula = events~tx+c1+c2+c3+offset(ln_time), reg_data)
 {
-  reg<-glm.nb(formula=formula,data=reg_data,link=log)
+  reg <- glm.nb(formula = formula, data = reg_data, link = log)
 
   #Risk score is the predicted values from the regression model with tx=0 and follow-up time set to 1
-  new_data<-as.data.frame(reg_data)
-  new_data[,'tx']<-0
-  new_data[,'time']<-1
-  new_data[,'ln_time']<-0
-  return (predict.glm(reg,newdata=new_data))
+  new_data <- as.data.frame(reg_data)
+  new_data[,'tx'] <- 0
+  new_data[,'time'] <- 1
+  new_data[,'ln_time'] <- 0
+  return (predict.glm(reg, newdata = new_data))
 }
 ```
 
 Now that we have written these two functions, we can use them to generate a simulated dataset with a sample size of 1000:
 
 ```{r, eval=FALSE}
- marker_formula<-events~tx+c1+c2+c3+offset(ln_time)
- sample_size<-1000
- reg_data<-generate_data(sample_size)
- reg_data[,'x']<-generate_marker(formula=marker_formula,reg_data)
- ```
+ marker_formula <- events ~ tx + c1 + c2 + c3 + offset(ln_time)
+ sample_size <- 1000
+ reg_data <- generate_data(sample_size)
+ reg_data[,'x'] <- generate_marker(formula = marker_formula, reg_data)
+```
 
-
-
-
+The simulated dataset is exported with the package, and can be called with `RIC::reg_data`.
 
 ```{r, include=FALSE}
 library(MASS)
