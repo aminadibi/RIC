@@ -2,7 +2,7 @@
 % Please edit documentation in R/RIC.r
 \name{ric_parametric}
 \alias{ric_parametric}
-\title{Returns p(x) and q(x) desired points and AUCi, and local slope when parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed. Note that this function does not need any data. Equations are provided in Appendix II of the paper.}
+\title{Returns p(x) and q(x) desired points and AUCi, and local slope when a parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed. Note that this function does not need any data. Equations are provided in Appendix II of the paper.}
 \usage{
 ric_parametric(p_x = NA, mu_x, mu_b, sd_x, sd_b, rho, type)
 }
@@ -25,5 +25,5 @@ ric_parametric(p_x = NA, mu_x, mu_b, sd_x, sd_b, rho, type)
 p(x), q(x), and AUCi
 }
 \description{
-Returns p(x) and q(x) desired points and AUCi, and local slope when parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed. Note that this function does not need any data. Equations are provided in Appendix II of the paper.
+Returns p(x) and q(x) desired points and AUCi, and local slope when a parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed. Note that this function does not need any data. Equations are provided in Appendix II of the paper.
 }

@@ -31,7 +31,7 @@ ric_empirical<-function(xb_data,b_bar=NULL)
 
 
 
-#' Returns p(x) and q(x) desired points and AUCi, and local slope when parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed. Note that this function does not need any data. Equations are provided in Appendix II of the paper.
+#' Returns p(x) and q(x) desired points and AUCi, and local slope when a parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed. Note that this function does not need any data. Equations are provided in Appendix II of the paper.
 #' @param p_x points on the x-axis of ric (p(x)): can be scalar or vector
 #' @param mu_x mean of  marker value
 #' @param mu_b mean of  expected treatment benefit
@@ -65,7 +65,7 @@ ric_parametric<-function(p_x=NA,mu_x,mu_b,sd_x,sd_b,rho,type)
 }
 
 
-#' GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation. See the ric.sample file for examples.
+#' GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation.
 #' @param reg_object a glm regression object (results of model fitting)
 #' @param pred_data data for G-computation. It must have a marker column named x and a treatment column named tx. Note that if there is variable follow-up time they should all be set to a unique value (e.g., one unit of time) in the prediction dataset to estimate rate
 #' @return RIC estimates

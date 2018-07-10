@@ -2,7 +2,7 @@
 % Please edit documentation in R/RIC.r
 \name{ric_regression}
 \alias{ric_regression}
-\title{GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation. See the ric.sample file for examples.}
+\title{GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation.}
 \usage{
 ric_regression(reg_object, pred_data)
 }
@@ -15,5 +15,5 @@ ric_regression(reg_object, pred_data)
 RIC estimates
 }
 \description{
-GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation. See the ric.sample file for examples.
+GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation.
 }

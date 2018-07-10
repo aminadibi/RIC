@@ -22,7 +22,7 @@ RIC depicts the trade-off between the population-level impact of a treatment (Y-
 
 Interpretations of shape, area under curve and slope in RIC curve are analogous to the widely used Receiver Operating Characteristic (ROC) curve, making it easier to use by the research community. For example: both curves span from (0,0) to (1,1), and the better the marker, the more concave the curves. 
 
-The following sections outline basic characteristics of the RIC curve and provide an example that illustrates its use. For a more comphrenesive discussion and a case study, please refer to the original research paper entitled *Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers* ^[Mohsen Sadatsafavi, Paul Gustafson, Zafar Zafari, and Don D. Sin, **Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers**, *Annals of Epidemiology*]  
+The following sections outline basic characteristics of the RIC curve and provide an example that illustrates its use. For a more comphrenesive discussion and a case study, please refer to the original research paper entitled *Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers*^[Mohsen Sadatsafavi, Paul Gustafson, Zafar Zafari, and Don D. Sin, **Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers**, *Annals of Epidemiology*].
 
 ## Definition of the RIC Curve
 
@@ -50,7 +50,7 @@ where $b(x)$ is the expected treatment effect and $\bar{q}$ is the average treat
 
 $\bar{b} = \int _x ^{+\infty} b(y)f(y)dy$.
 
-The RIC curve is the plot of $p(x)$ against $q(x)$ as $x$ varies. 
+The RIC curve is the plot of $q(x)$ against $p(x)$ as $x$ changes. 
 
 ![RIC](./RIC.png)
 
@@ -64,7 +64,7 @@ Similar to the widely used ROC curve, RIC has interpretable shape, area under th
 Similar to the ROC curve, the non-informative marker on the RIC curve for a clinical
 outcome corresponds to a line connecting points (0,0) and (1,1). The more concave the curve, the better the marker. 
 
-An illustrative example would make this more clear. Assume there are two candidate markers (green and red) that can be used to decide whether or not to provide the treatment. In the RIC plot below the marker that corresponds to the green line provides better concentration of benefits at any given level of $q$. For instance, if we choose threshold values that lead to half of patients receiving the treatment, the green marker will provide more benefit. 
+An illustrative example would make this more clear. Assume there are two candidate markers (green and red) that can be used to decide whether or not to provide the treatment. In the RIC plot below the marker that corresponds to the green line provides better concentration of benefits at any given level of $p$. For instance, if we choose threshold values that lead to half of patients receiving the treatment, the green marker will provide more benefit. 
 
 ![RIC_shape](./RIC_shape.png)
 
@@ -79,7 +79,7 @@ If the treatment effect is characterized as the change in the risk or rate of an
 
 ## Example with Simulated Data
 
-A simulated dataset called `reg_data` is included in the package. The dataset pertains to a simulated randomized clnical trial in which patients are randomized to either placebo or treatment and are followed for up to one year. The outcome of interest is the number of disease flair-ups (exacerbations) during follow up.
+A simulated dataset called `reg_data` is included in the package. The dataset pertains to a simulated randomized clnical trial in which patients are randomized to either placebo or treatment and are followed for up to one year. The outcome of interest is the number of disease flair-ups (exacerbations) during follow up. For a detailed discussion of how this dataset was simulated, please refer to the vignette entitled "Simulating a dataset for the RIC Curve."
 
 For each individual, the dataset contains the marker value (x), three covariates (c1-c3), a treatment assignment indicator (tx), log of follow-up time (ln_time), and number of events (events). The first few data rows are provided below:
 
@@ -93,7 +93,9 @@ knitr::kable(tab)
 ```{r, echo=TRUE, results='asis'}
 library(RIC)
 #Is called by the main code (below) to calculate RIC metrics using different methods
-ric=function(marker_formula=events~tx+c1+c2+c3+offset(ln_time),q_formula=events~tx+c1+c2+c3+offset(ln_time),sample_size=1000)
+ric<-function(marker_formula=events~tx+c1+c2+c3+offset(ln_time),
+              q_formula=events~tx+c1+c2+c3+offset(ln_time),
+              sample_size=1000)
 {
   message("legend:\n dark line: empirical RIC\n grey line: parameteric approximation of RIC\n emp: empirical \n mfc: method of forced choice: simulating pairs of subjects and a=giving treatment to the one with higher marker value, b=giving both treatment, c) calculating the average benefit of a over b.\n parm: parametric approximation)")
   pred_data<-reg_data
