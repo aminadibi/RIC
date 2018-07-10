@@ -2,7 +2,7 @@
 % Please edit documentation in R/RIC.r
 \name{ric_parametric}
 \alias{ric_parametric}
-\title{Returns RIC statistics p(x) and q(x) desired points and AUCi, and local slope when a parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed.}
+\title{Returns RIC statistics p(x), q(x, AUCi, and local slope when a parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed.}
 \usage{
 ric_parametric(p_x = NA, mu_x, mu_b, sd_x, sd_b, rho, type)
 }
