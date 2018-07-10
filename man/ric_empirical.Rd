@@ -2,7 +2,7 @@
 % Please edit documentation in R/RIC.r
 \name{ric_empirical}
 \alias{ric_empirical}
-\title{Calculates the relevant statistics (p(x), q(x), and AUCi) given a random sample of marker and corresponding treatment benefit.}
+\title{Calculates the relevant RIC statistics (p(x), q(x), and AUCi) given a random sample of marker and corresponding treatment benefit.}
 \usage{
 ric_empirical(xb_data, b_bar = NULL)
 }
@@ -15,5 +15,6 @@ ric_empirical(xb_data, b_bar = NULL)
 p(x), q(x), and AUCi
 }
 \description{
-Calculates the relevant statistics (p(x), q(x), and AUCi) given a random sample of marker and corresponding treatment benefit.
+In clinical trials and observational studies the net treatment benefit is rarely available for each individual, as
+the same person is either a control or a treatment case, and rarely both. However, if this information is available, ric_empirical can be used to calculate relevant RIC statistics.
 }

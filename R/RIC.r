@@ -1,7 +1,10 @@
 #Includes core functions for RIC analysis
 
 
-#' Calculates the relevant statistics (p(x), q(x), and AUCi) given a random sample of marker and corresponding treatment benefit.
+#' Calculates the relevant RIC statistics (p(x), q(x), and AUCi) given a random sample of marker and corresponding treatment benefit.
+#'
+#' In clinical trials and observational studies the net treatment benefit is rarely available for each individual, as
+#' the same person is either a control or a treatment case, and rarely both. However, if this information is available, ric_empirical can be used to calculate relevant RIC statistics.
 #' @param xb_data nx2 matrix with first column being the random draws from marker values and the second being an unbiased estimate of treatment benefit at that marker value
 #' @param b_bar expected benefit of treating all eligible patients vs. treating no one. Should be populated with expected benefit of treatment without testing ONLY when the outcome is a policy-relevant metric that includes the consequence of testing, otherwise the sample mean of benefits will be used;
 #' @return p(x), q(x), and AUCi
@@ -31,7 +34,9 @@ ric_empirical<-function(xb_data,b_bar=NULL)
 
 
 
-#' Returns p(x) and q(x) desired points and AUCi, and local slope when a parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed. Note that this function does not need any data. Equations are provided in Appendix II of the paper.
+#' Returns RIC statistics p(x), q(x, AUCi, and local slope when a parametric distribution for the joint distribution of marker value and expected treatment benefit is assumed.
+#'
+#' Note that this function does not need any data. Equations are provided in Appendix II of the paper.
 #' @param p_x points on the x-axis of ric (p(x)): can be scalar or vector
 #' @param mu_x mean of  marker value
 #' @param mu_b mean of  expected treatment benefit
@@ -66,6 +71,10 @@ ric_parametric<-function(p_x=NA,mu_x,mu_b,sd_x,sd_b,rho,type)
 
 
 #' GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation.
+#'
+#' In real world clinical trials and observational studies, net treatment effect is generally not available at the indivdiaul level.
+#' However, G-Computation can be used to estimate net benefit by fitting a regression. ric_regression calculates relevant RIC statistics using the appropriate
+#' regression object and dataset.
 #' @param reg_object a glm regression object (results of model fitting)
 #' @param pred_data data for G-computation. It must have a marker column named x and a treatment column named tx. Note that if there is variable follow-up time they should all be set to a unique value (e.g., one unit of time) in the prediction dataset to estimate rate
 #' @return RIC estimates

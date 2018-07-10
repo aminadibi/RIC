@@ -22,7 +22,7 @@ RIC depicts the trade-off between the population-level impact of a treatment (Y-
 
 Interpretations of shape, area under curve and slope in RIC curve are analogous to the widely used Receiver Operating Characteristic (ROC) curve, making it easier to use by the research community. For example: both curves span from (0,0) to (1,1), and the better the marker, the more concave the curves. 
 
-The following sections outline basic characteristics of the RIC curve and provide an example that illustrates its use. For a more comphrenesive discussion and a case study, please refer to the original research paper entitled *Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers*^[Mohsen Sadatsafavi, Paul Gustafson, Zafar Zafari, and Don D. Sin, **Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers**, *Annals of Epidemiology*].
+The following sections outline basic characteristics of the RIC curve and provide an example that illustrates its use. For a more comphrenesive discussion and a case study, please refer to the original research paper entitled *Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers*^[Mohsen Sadatsafavi, Paul Gustafson, Zafar Zafari, and Don D. Sin, **Relative Impact Characteristic (RIC) curve: a graphical tool to visualize and quantify the clinical utility and population-level consequences of implementing markers**, *Submitted to Annals of Epidemiology*].
 
 ## Definition of the RIC Curve
 
@@ -90,36 +90,106 @@ tab <- head(reg_data)
 knitr::kable(tab)
 ```
 
-```{r, echo=TRUE, results='asis'}
+The function `ric_empirical` calculates RIC statistics when treatment benefit is available at the individual level. In real life clinical trials, however, net treatment benefit is often not avaiable at the individual level, since patients are generally assigned to *either* the treatment *or* the control group. 
+
+One way to go about calculating RIC in situations like this is through G-computation, where a model is fit to the data to demonstrate what - in our belief - is the association the outcome, treatment, and covariates. This model is referred to as the Q-model. The code snippet below demonstrates this approach:
+
+
+```{r, eval = FALSE}
 library(RIC)
 #Is called by the main code (below) to calculate RIC metrics using different methods
-ric<-function(marker_formula=events~tx+c1+c2+c3+offset(ln_time),
-              q_formula=events~tx+c1+c2+c3+offset(ln_time),
-              sample_size=1000)
-{
-  message("legend:\n dark line: empirical RIC\n grey line: parameteric approximation of RIC\n emp: empirical \n mfc: method of forced choice: simulating pairs of subjects and a=giving treatment to the one with higher marker value, b=giving both treatment, c) calculating the average benefit of a over b.\n parm: parametric approximation)")
-  pred_data<-reg_data
-  pred_data[,'ln_time']<-0
+  marker_formula <- events~tx+c1+c2+c3+offset(ln_time)
+  q_formula <- events~tx+c1+c2+c3+offset(ln_time)
+  sample_size <- 1000
+
+  pred_data <- reg_data
+  pred_data[,'ln_time'] <- 0
+  
   #G-computation
-  reg_object<-MASS::glm.nb(data=reg_data,formula=q_formula,link=log)
-  res<-ric_regression(reg_object,pred_data)
-  plot(res$pq[,1],res$pq[,2],type='l',xlab="Proportion treated",ylab="Relative benefit",xlim=c(0,1),ylim=c(0,1))
+  reg_object <- MASS::glm.nb(data=reg_data,
+                             formula=q_formula,
+                             link=log)
+  
+  res <- ric_regression(reg_object,pred_data)
+  
+  plot(res$pq[,1],
+       res$pq[,2],
+       type='l',
+       xlab="Proportion treated",
+       ylab="Relative benefit",
+       xlim=c(0,1),
+       ylim=c(0,1))
+  
   text(0.7,0.3,paste("AUCi (emp):",round(res$auci,3)))
+  
+  
+```
+
+Alternatively, when the joint distribution of $X$ - the marker - and $B$ - the treatment benefit - is parametric,  `ric_parametric` can be used to calculate RIC statistics: 
+
+```{r, eval = FALSE}
   #Parametric RIC (Appendix II) based on estimated mean and covariance matrix of (x,b).
-  xb_data<-res$xb_data
-  xb_data[,2]<-log(xb_data[,2])
-  temp<-ric_parametric(p_x=(0:100)/100,mu_x =mean(xb_data[,1]),sd_x = sd(xb_data[,1]), mu_b = mean(xb_data[,2]), sd_b = sd(xb_data[,2]),rho = cor(xb_data)[1,2],type = "lognormal")
-  lines(temp$p_x,temp$q_x,lty=6,col='grey')
-  text(0.7,0.2,paste("AUCi (parm):",round(temp$auci,3)))
+  xb_data <- res$xb_data
+  xb_data[,2] <- log(xb_data[,2])
+  ric_results <- ric_parametric(p_x=(0:100)/100,
+                         mu_x =mean(xb_data[,1]),
+                         sd_x = sd(xb_data[,1]), 
+                         mu_b = mean(xb_data[,2]), 
+                         sd_b = sd(xb_data[,2]),
+                         rho = cor(xb_data)[1,2],
+                         type = "lognormal")
+  
+  lines(ric_results$p_x, ric_results$q_x, lty=6, col='grey')
+  text(0.7,0.2, paste("AUCi (parm):", round(ric_results$auci,3)))
   #Simulating the method of forced choice: creating pairs of subjects and a=giving treatment to the one with higher marker value, b=giving both treatment, c) calculating the average benefit of a over b
   #see auci_mfc() for details
-  text(0.7,0.1,paste("AUCi (mfc):",round(auci_mfc(res$xb),3)))
-}
+  text(0.7,0.1, paste("AUCi (mfc):", round(auci_mfc(res$xb),3)))
 
-#Main code
+```
 
-#Complete score (includes all covariates)
-ric(marker_formula=events~tx+c1+c2+c3+offset(ln_time))
 
+
+```{r, echo=FALSE, results='asis'}
+library(RIC)
+#Is called by the main code (below) to calculate RIC metrics using different methods
+  marker_formula <- events~tx+c1+c2+c3+offset(ln_time)
+  q_formula <- events~tx+c1+c2+c3+offset(ln_time)
+  sample_size <- 1000
+
+  pred_data <- reg_data
+  pred_data[,'ln_time'] <- 0
+  
+  #G-computation
+  reg_object <- MASS::glm.nb(data=reg_data,
+                             formula=q_formula,
+                             link=log)
+  
+  res <- ric_regression(reg_object,pred_data)
+  
+  plot(res$pq[,1],
+       res$pq[,2],
+       type='l',
+       xlab="Proportion treated",
+       ylab="Relative benefit",
+       xlim=c(0,1),
+       ylim=c(0,1))
+  
+  text(0.7,0.3,paste("AUCi (emp):",round(res$auci,3)))
+  #Parametric RIC (Appendix II) based on estimated mean and covariance matrix of (x,b).
+  xb_data <- res$xb_data
+  xb_data[,2] <- log(xb_data[,2])
+  temp <- ric_parametric(p_x=(0:100)/100,
+                         mu_x =mean(xb_data[,1]),
+                         sd_x = sd(xb_data[,1]), 
+                         mu_b = mean(xb_data[,2]), 
+                         sd_b = sd(xb_data[,2]),
+                         rho = cor(xb_data)[1,2],
+                         type = "lognormal")
+  
+  lines(temp$p_x,temp$q_x,lty=6,col='grey')
+  text(0.7,0.2,paste("AUCi (parm):", round(temp$auci,3)))
+  #Simulating the method of forced choice: creating pairs of subjects and a=giving treatment to the one with higher marker value, b=giving both treatment, c) calculating the average benefit of a over b
+  #see auci_mfc() for details
+  text(0.7,0.1,paste("AUCi (mfc):", round(auci_mfc(res$xb),3)))
 
 ```

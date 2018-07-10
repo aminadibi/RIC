@@ -15,5 +15,7 @@ ric_regression(reg_object, pred_data)
 RIC estimates
 }
 \description{
-GLM-based RIC estimator. Needs a GLM regression object and data to use for G-computation.
+In real world clinical trials and observational studies, net treatment effect is generally not available at the indivdiaul level.
+However, G-Computation can be used to estimate net benefit by fitting a regression. ric_regression calculates relevant RIC statistics using the appropriate
+regression object and dataset.
 }
