@@ -92,7 +92,7 @@ knitr::kable(tab)
 
 The function `ric_empirical` calculates RIC statistics when treatment benefit is available at the individual level. In real life clinical trials, however, net treatment benefit is often not avaiable at the individual level, since patients are generally assigned to *either* the treatment *or* the control group. 
 
-One way to go about calculating RIC in situations like this is through G-computation, where a model is fit to the data to demonstrate what - in our belief - is the association the outcome, treatment, and covariates. This model is referred to as the Q-model. The code snippet below demonstrates this approach:
+One way to go about calculating RIC in situations like this is through G-computation, where a model is fit to the data to demonstrate what - in our belief - is the association the outcome, treatment, and covariates. This model is referred to as the Q-model. When the Q-model is available, `ric_regression` can be used to calculate RIC statistics. The code snippet below demonstrates this approach:
 
 
 ```{r, eval = FALSE}
