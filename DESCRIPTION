@@ -4,7 +4,7 @@ Version: 0.1.0
 Authors@R: c(
     person("Amin", "Adibi", email = "adibi@alumni.ubc.ca", role = c("aut", "cre")),
     person("Mohsen", "Sadatsafavi", email = "mohsen.sadatsafavi@ubc.ca", role = c("aut", "cph")))
-Description: The Relative Impact Characteristic 'RIC' curve depicts the trade-off between the population-level impact of treatment as a function of the size of the treated population. The slope and area under curve of 'RIC' can be interpreted similar to the widely used 'ROC' curve. Based on Sadatsafavi et al. <doi:10.1016/j.annepidem.2018.07.014> 
+Description: The Relative Impact Characteristic 'RIC' curve depicts the trade-off between the population-level impact of treatment as a function of the size of the treated population. The slope and area under curve of 'RIC' can be interpreted similar to the widely used 'ROC' curve, based on Sadatsafavi et al. <doi:10.1016/j.annepidem.2018.07.014>. 
 Depends: R (>= 3.4.0)
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
