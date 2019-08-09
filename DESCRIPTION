@@ -1,5 +1,5 @@
 Package: RIC
-Title: R Package for Relative Impact Characteristic (RIC) Curve
+Title: Relative Impact Characteristic Curve
 Version: 0.1.0
 Authors@R: c(
     person("Amin", "Adibi", email = "adibi@alumni.ubc.ca", role = c("aut", "cre")),

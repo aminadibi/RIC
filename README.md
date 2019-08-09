@@ -2,9 +2,9 @@
 [![CRAN Status](https://www.r-pkg.org/badges/version/RIC)](https://cran.r-project.org/package=RIC)
 
 # RIC
-R Package for Relative Impact Characteristic (RIC) Curve
+Relative Impact Characteristic (RIC) Curve
 
-*RIC* is an R Package for the Relative Impact Characteristic (RIC) Curve: a novel graphical tool that visualizes and quantifies the population-level consequences of implementing diagnostic and prognostic biomarkers.
+Relative Impact Characteristic (RIC) Curve is a novel graphical tool that visualizes and quantifies the population-level consequences of implementing diagnostic and prognostic biomarkers.
 
 *RIC* is available through [GitHub](https://github.com/aminadibi/RIC). 
 
