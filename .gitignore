@@ -28,3 +28,4 @@ rsconnect/
 inst/doc
 LICENSE
 .travis.yml
+cran-comments.md
