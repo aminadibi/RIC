@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/resplab/RIC.svg?branch=master)](https://travis-ci.org/resplab/RIC)
+[![CRAN Status](https://www.r-pkg.org/badges/version/RIC)](https://cran.r-project.org/web/packages/RIC/index.html)
 
 # RIC
 R Package for Relative Impact Characteristic (RIC) Curve
